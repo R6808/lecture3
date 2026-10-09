@@ -10,6 +10,10 @@ import 'package:lecture3/logger.dart';
 import 'package:lecture3/student.dart';
 
 /// 构造演示数据
+///
+/// 其中「吴九」的分数是 105，用来演示 setter 校验；
+/// 但直接用主构造函数会抛错，所以这里用 fromJson 也不合适——
+/// 演示数据的构建见下面的 demoValidation()。
 List<Student> buildSampleStudents() => [
       Student('01', '李华', 92),
       Student('02', '王芳', 55),
@@ -55,22 +59,29 @@ void demoEncapsulation() {
   print('  score 的运行时类型：${fromJson.score.runtimeType}（JSON 里是 int，已转成 double）');
 }
 
-/// 判断一个对象是否具备 Logger 能力
+/// 打印一个对象的类型链
 ///
-/// 形参声明成 Object，让这个 is 判断在编译期无法被静态确定，
-/// 从而真实地在运行时验证混入是否生效。
-bool _isLogger(Object o) => o is Logger;
+/// 形参声明成 Object 而不是 DetailedGradeBook，是为了让下面的 is 判断
+/// 在编译期无法被静态确定（否则分析器会提示"类型检查恒为真"），
+/// 从而真实地在运行时验证继承链与混入链。
+void describeTypeChain(Object o) {
+  print('  实际运行时类型：${o.runtimeType}');
+  print('  o is GradeBook   ? ${o is GradeBook}   // 来自 extends');
+  print('  o is Formattable ? ${o is Formattable}   // 来自 with');
+  print('  o is Logger      ? ${o is Logger}   // 由 GradeBook 带进来');
+}
 
-/// 演示 Logger mixin：GradeBook 通过 with 获得了日志能力
-void demoLoggerMixin() {
-  print('\n===== 2. Logger mixin =====');
+/// 演示继承 + mixin 的组合
+void demoInheritanceAndMixin() {
+  print('\n===== 2. 继承与 mixin =====');
 
-  final book = GradeBook(buildSampleStudents());
-  print('GradeBook 的类型链：');
-  print('  book is Logger → ${_isLogger(book)}');
-  print('  book.logTag    → ${book.logTag}');
-  print('  下面这行日志由 mixin 提供，GradeBook 自己并没有定义 log 方法：');
-  book.log('这条日志来自 Logger mixin');
+  final book = DetailedGradeBook(buildSampleStudents());
+  print('DetailedGradeBook 的类型链：');
+  describeTypeChain(book);
+  print('\n调用混入进来的 log()（来自 Logger mixin）：');
+  book.log('这条日志由 mixin 提供，GradeBook 本身没有定义 log 方法');
+  print('\n调用混入进来的 format()（来自 Formattable mixin）：');
+  print(book.format());
 }
 
 /// 演示 Validated mixin 的约定式用法
@@ -112,7 +123,7 @@ void main() {
   print('==================================================\n');
 
   demoEncapsulation();
-  demoLoggerMixin();
+  demoInheritanceAndMixin();
   demoValidatedMixin();
 
   print('\n===== 4. 成绩册统计（全部用集合链式方法）=====');

@@ -199,12 +199,47 @@ void main() {
       expect(() => book.log('测试日志'), returnsNormally);
     });
 
+    test('DetailedGradeBook 同时具备继承与混入的能力', () {
+      final detailed = DetailedGradeBook(sample());
+
+      expect(detailed, isA<GradeBook>()); // 来自 extends
+      expect(detailed, isA<Formattable>()); // 来自 with
+      expect(detailed, isA<Logger>()); // 被 GradeBook 带进来的
+      expect(detailed.reportTitle, '详细成绩册');
+      expect(detailed.format(), contains('平均分：67.71'));
+      expect(detailed.format(), startsWith('+'));
+      expect(detailed.format(), endsWith('+'));
+
+      // 边框对齐：每一行的显示宽度都必须一样，否则框会歪
+      final widths = detailed.format().split('\n').map(displayWidth).toSet();
+      expect(widths.length, 1, reason: '文本框每行的显示宽度应完全一致：$widths');
+    });
+
     test('Validated mixin 声明抽象 getter，未就绪时 check() 抛 StateError', () {
       final ok = _FakeReport()..ready = true;
       final bad = _FakeReport();
 
       expect(() => ok.check(), returnsNormally);
       expect(() => bad.check(), throwsStateError);
+    });
+  });
+
+  // ============================================================
+  // 第四组：显示宽度工具（文本框对齐的基础）
+  // ============================================================
+  group('显示宽度', () {
+    test('中文按两列、英文数字按一列计算', () {
+      expect(displayWidth('abc'), 3);
+      expect(displayWidth('12345'), 5);
+      expect(displayWidth('中文'), 4);
+      expect(displayWidth('平均分：67.71'), 13); // 6 + 2 + 5
+      expect(displayWidth(''), 0);
+    });
+
+    test('padToWidth 补足到指定显示宽度', () {
+      expect(padToWidth('中文', 6), '中文  ');
+      expect(padToWidth('abcd', 6), 'abcd  ');
+      expect(displayWidth(padToWidth('中文', 6)), 6);
     });
   });
 }
