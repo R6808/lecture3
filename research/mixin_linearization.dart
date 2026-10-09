@@ -143,10 +143,7 @@ void main() {
   print('查找某个方法时从右往左找第一个定义；super 则继续往左找。');
   print('所以"最右边优先"不是特例，而是这条线性链上从左到右搜索的直接结果。');
 
-  final students = [
-    Student('01', '甲', 92),
-    Student('02', '乙', 55),
-  ];
+  final students = [Student('01', '甲', 92), Student('02', '乙', 55)];
   final book = GradeBook(students);
   print('\n附：项目里的 GradeBook 同时是 Logger（混入）与 Object（根类），');
   print('    混入没有占用 extends 位置，DetailedGradeBook 才能继续 extends GradeBook，');

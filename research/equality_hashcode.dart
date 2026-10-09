@@ -127,7 +127,9 @@ void experimentHalfBaked() {
 
   print('a = $a, b = $b');
   print('  a == b                     → ${a == b}    ← == 说它们相等，看起来没问题');
-  print('  a.hashCode == b.hashCode   → ${a.hashCode == b.hashCode}   ← 但哈希值不一样！');
+  print(
+    '  a.hashCode == b.hashCode   → ${a.hashCode == b.hashCode}   ← 但哈希值不一样！',
+  );
 
   print('\n  这个自相矛盾的状态会造成三种静默故障：');
   final asSet = <HalfBakedStudent>{a, b};
@@ -223,8 +225,10 @@ void experimentMutableHashCode() {
   print('\n  那项目里的 Student 是怎么处理的？');
   final s = Student('01', '甲', 60);
   print('    Student 有可变的 _score，所以**刻意不重写 == 和 hashCode**：');
-  print('    Student("01","甲",60) == Student("01","甲",60) → '
-      '${Student('01', '甲', 60) == Student('01', '甲', 60)}');
+  print(
+    '    Student("01","甲",60) == Student("01","甲",60) → '
+    '${Student('01', '甲', 60) == Student('01', '甲', 60)}',
+  );
   print('    这样它就永远只能按身份比较，不会因为改分而"从 Set 里消失"。');
   print('    需要判断"是不是同一个学生"时，项目里用 byId() 返回的 Map 按学号查，');
   print('    而不是依赖 ==。当前示例：$s');

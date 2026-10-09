@@ -115,15 +115,27 @@ void experimentProjectUsage() {
   print('  原列表加了 1 人，成绩册人数 = ${book.count}（没有被影响，因为构造时拷贝了）');
 
   print('外部直接改成绩册自己的列表：');
-  _try('  book.students.add(...)', () => book.students.add(Student('04', '丁', 70)));
-  _try('  book.students[0] = ...', () => book.students[0] = Student('04', '丁', 70));
+  _try(
+    '  book.students.add(...)',
+    () => book.students.add(Student('04', '丁', 70)),
+  );
+  _try(
+    '  book.students[0] = ...',
+    () => book.students[0] = Student('04', '丁', 70),
+  );
 
   print('那排序怎么办？内部列表不可变，sort 会失败，所以是先复制再排序：');
-  _try('  book.students.sort(...)  直接排内部列表',
-      () => book.students.sort((x, y) => x.score.compareTo(y.score)));
+  _try(
+    '  book.students.sort(...)  直接排内部列表',
+    () => book.students.sort((x, y) => x.score.compareTo(y.score)),
+  );
   final sorted = book.sortedByScoreDesc();
-  print('  book.sortedByScoreDesc() → ${sorted.map((s) => '${s.name}${s.score}').join('、')}');
-  print('  内部顺序仍为 → ${book.students.map((s) => '${s.name}${s.score}').join('、')}');
+  print(
+    '  book.sortedByScoreDesc() → ${sorted.map((s) => '${s.name}${s.score}').join('、')}',
+  );
+  print(
+    '  内部顺序仍为 → ${book.students.map((s) => '${s.name}${s.score}').join('、')}',
+  );
   print('  结论：sortedByScoreDesc 里那句 [...students]..sort(...) 的复制不是多余的，');
   print('        少了它就会直接抛 UnsupportedError。');
 
@@ -132,7 +144,9 @@ void experimentProjectUsage() {
   final s = Set<int>.unmodifiable({1, 2});
   _try('  map["b"] = 2', () => m['b'] = 2);
   _try('  set.add(3)  ', () => s.add(3));
-  print('  注意：只有 List.unmodifiable / Map.unmodifiable / Set.unmodifiable 三个工厂，');
+  print(
+    '  注意：只有 List.unmodifiable / Map.unmodifiable / Set.unmodifiable 三个工厂，',
+  );
   print('        没有"不可变 List 视图"这种东西，想只读视图得自己写包装类。');
 }
 

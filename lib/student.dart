@@ -32,9 +32,9 @@ class Student {
   /// 用 `(json['score'] as num).toDouble()` 而不是直接 `as double`，
   /// 因为 JSON 里的整数（如 92）会被解析成 int，直接转 double 会抛类型错误。
   Student.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as String,
-        name = json['name'] as String,
-        _score = (json['score'] as num).toDouble() {
+    : id = json['id'] as String,
+      name = json['name'] as String,
+      _score = (json['score'] as num).toDouble() {
     _validate(_score);
   }
 
@@ -70,11 +70,7 @@ class Student {
   }
 
   /// 转回 Map，便于打印与序列化
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'score': _score,
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'score': _score};
 
   @override
   String toString() => 'Student($id, $name, ${_score.toStringAsFixed(1)})';

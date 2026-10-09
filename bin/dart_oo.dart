@@ -15,14 +15,14 @@ import 'package:lecture3/student.dart';
 /// 但直接用主构造函数会抛错，所以这里用 fromJson 也不合适——
 /// 演示数据的构建见下面的 demoValidation()。
 List<Student> buildSampleStudents() => [
-      Student('01', '李华', 92),
-      Student('02', '王芳', 55),
-      Student('03', '张伟', 78),
-      Student.fromJson({'id': '04', 'name': '刘敏', 'score': 88}),
-      Student.fromJson({'id': '05', 'name': '陈静', 'score': 61}),
-      Student.fresh('06', '赵磊'), // 分数默认 0
-      Student('07', '孙悦', 100),
-    ];
+  Student('01', '李华', 92),
+  Student('02', '王芳', 55),
+  Student('03', '张伟', 78),
+  Student.fromJson({'id': '04', 'name': '刘敏', 'score': 88}),
+  Student.fromJson({'id': '05', 'name': '陈静', 'score': 61}),
+  Student.fresh('06', '赵磊'), // 分数默认 0
+  Student('07', '孙悦', 100),
+];
 
 /// 演示封装与校验
 void demoEncapsulation() {

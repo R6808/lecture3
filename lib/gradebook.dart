@@ -130,8 +130,11 @@ class GradeBook with Logger {
     // 全程用 map + join 拼字符串，不使用手写循环
     log(
       (grouped.keys.toList()..sort())
-          .map((k) => '  $k（${grouped[k]!.length} 人）：'
-              '${grouped[k]!.map((s) => s.name).join('、')}')
+          .map(
+            (k) =>
+                '  $k（${grouped[k]!.length} 人）：'
+                '${grouped[k]!.map((s) => s.name).join('、')}',
+          )
           .join('\n'),
     );
 
@@ -177,16 +180,19 @@ mixin Formattable {
   /// 而中文在终端里占两列，用 padRight 排出来的框会左右错位。
   /// 所以这里用 displayWidth / padToWidth 按**显示宽度**对齐。
   String format() {
-    final width = <String>[reportTitle, ...reportLines]
-        .map(displayWidth)
-        .reduce((a, b) => a > b ? a : b);
+    final width = <String>[
+      reportTitle,
+      ...reportLines,
+    ].map(displayWidth).reduce((a, b) => a > b ? a : b);
     final border = '+${'-' * (width + 2)}+';
 
     final buffer = StringBuffer();
     buffer.writeln(border);
     buffer.writeln('| ${padToWidth(reportTitle, width)} |');
     buffer.writeln(border);
-    reportLines.map((line) => '| ${padToWidth(line, width)} |').forEach(buffer.writeln);
+    reportLines
+        .map((line) => '| ${padToWidth(line, width)} |')
+        .forEach(buffer.writeln);
     buffer.write(border);
     return buffer.toString();
   }
@@ -224,10 +230,10 @@ class DetailedGradeBook extends GradeBook with Formattable {
 
   @override
   List<String> get reportLines => [
-        '人数：$count',
-        '平均分：$average',
-        '最高分：${maxBy.name} ${maxBy.score}',
-        '及格人数：$countPassed',
-        '不及格：${failedNames.isEmpty ? '无' : failedNames.join('、')}',
-      ];
+    '人数：$count',
+    '平均分：$average',
+    '最高分：${maxBy.name} ${maxBy.score}',
+    '及格人数：$countPassed',
+    '不及格：${failedNames.isEmpty ? '无' : failedNames.join('、')}',
+  ];
 }

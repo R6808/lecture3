@@ -14,14 +14,14 @@ import 'package:test/test.dart';
 
 /// 测试用固定数据集，分数与姓名都刻意选了能区分边界值的组合
 List<Student> sample() => [
-      Student('01', '甲', 92), // 优
-      Student('02', '乙', 55), // 不及格
-      Student('03', '丙', 78), // 中
-      Student('04', '丁', 88), // 良
-      Student('05', '戊', 61), // 及格
-      Student('06', '己', 0), // 边界：0 分，不及格
-      Student('07', '庚', 100), // 边界：100 分，优
-    ];
+  Student('01', '甲', 92), // 优
+  Student('02', '乙', 55), // 不及格
+  Student('03', '丙', 78), // 中
+  Student('04', '丁', 88), // 良
+  Student('05', '戊', 61), // 及格
+  Student('06', '己', 0), // 边界：0 分，不及格
+  Student('07', '庚', 100), // 边界：100 分，优
+];
 
 void main() {
   // ============================================================
@@ -104,8 +104,10 @@ void main() {
     test('内部列表不可被外部修改', () {
       final book = GradeBook(sample());
 
-      expect(() => book.students.add(Student('99', '壬', 50)),
-          throwsUnsupportedError);
+      expect(
+        () => book.students.add(Student('99', '壬', 50)),
+        throwsUnsupportedError,
+      );
     });
   });
 
@@ -134,8 +136,13 @@ void main() {
 
       expect(
         () => s.score = 120,
-        throwsA(isA<ArgumentError>()
-            .having((e) => e.message, 'message', contains('120'))),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            contains('120'),
+          ),
+        ),
       );
     });
 
