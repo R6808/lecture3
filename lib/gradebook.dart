@@ -4,10 +4,13 @@
 /// 硬性要求：统计功能**禁止手写 for 循环**，一律用 Iterable 高阶方法链。
 library;
 
+import 'logger.dart';
 import 'student.dart';
 
 /// 成绩册
-class GradeBook {
+///
+/// 用 with 混入 Logger，获得日志能力而不占用继承位。
+class GradeBook with Logger {
   /// 内部用 List 承载（List 有序、可重复，符合"成绩册有一行行记录"的语义）
   final List<Student> students;
 
@@ -113,33 +116,33 @@ class GradeBook {
 
   /// 打印完整统计报告
   void printReport() {
-    print('===== 成绩册统计报告 =====');
-    print('人数：$count');
-    print('平均分：$average');
-    print('最高分：${maxBy.name}（${maxBy.score}）');
-    print('最低分：${minBy.name}（${minBy.score}）');
-    print('及格人数：$countPassed');
-    print('不及格名单：${failedNames.isEmpty ? '无' : failedNames.join('、')}');
+    logTitle('成绩册统计报告');
+    log('人数：$count');
+    log('平均分：$average');
+    log('最高分：${maxBy.name}（${maxBy.score}）');
+    log('最低分：${minBy.name}（${minBy.score}）');
+    log('及格人数：$countPassed');
+    log('不及格名单：${failedNames.isEmpty ? '无' : failedNames.join('、')}');
 
-    print('--- 按等级分档 ---');
+    log('--- 按等级分档 ---');
     final grouped = groupByGrade();
     // 排序后再打印：Map 的遍历顺序不应被依赖
     // 全程用 map + join 拼字符串，不使用手写循环
-    print(
+    log(
       (grouped.keys.toList()..sort())
           .map((k) => '  $k（${grouped[k]!.length} 人）：'
               '${grouped[k]!.map((s) => s.name).join('、')}')
           .join('\n'),
     );
 
-    print('--- 按分数降序 ---');
-    print(
+    log('--- 按分数降序 ---');
+    log(
       sortedByScoreDesc()
           .map((s) => '  ${s.name}：${s.score}（${s.grade}）')
           .join('\n'),
     );
 
-    print('--- 统计链结果 ---');
-    advancedReport().forEach((k, v) => print('  $k：$v'));
+    log('--- 统计链结果 ---');
+    advancedReport().forEach((k, v) => log('  $k：$v'));
   }
 }
